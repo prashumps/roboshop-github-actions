@@ -1,0 +1,13 @@
+name: CI ReUse PR
+on:
+  workflow_call:
+jobs:
+  Build:
+    runs-on: self-hosted
+    steps:
+      - run: echo OK
+  Test:
+    needs: Build
+    runs-on: self-hosted
+    steps:
+      - run: echo OK
