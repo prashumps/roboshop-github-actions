@@ -14,9 +14,10 @@ jobs:
 
   Test:
     needs: Build
-    runs-on: self-hosted
-    steps:
-      - run: echo OK
+    uses: prashumps/roboshop-github-actions/.github/workflows/test.yml@main
+    with:
+      appType: '${{ inputs.appType }}'
+
   Dev_Deploy:
     environment: DEV
     needs: Test
