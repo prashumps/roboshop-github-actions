@@ -7,7 +7,7 @@ on:
         type: string
 jobs:
   NodeJS_Build:
-    if: appType == 'nodejs'
+    if: ${{ inputs.appType == 'nodejs' }}
     runs-on: self-hosted
     steps:
       - run: echo OK
