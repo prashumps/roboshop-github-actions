@@ -7,8 +7,6 @@ on:
 jobs:
   Build:
     runs-on: ubuntu-latest
-    env:
-      vault_token: ${{ secrets.vault_token }}
     steps:
       - uses: actions/checkout@v4
       - name: Docker Build
