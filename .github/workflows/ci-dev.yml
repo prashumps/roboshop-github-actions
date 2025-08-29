@@ -1,8 +1,13 @@
 name: CI ReUse Dev
 on:
   workflow_call:
+    inputs:
+      appType:
+        required: true
+        type: string
 jobs:
-  Build:
+  NodeJS_Build:
+    if: appType == "nodejs"
     runs-on: self-hosted
     steps:
       - run: echo OK
