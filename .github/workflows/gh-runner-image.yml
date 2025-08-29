@@ -10,7 +10,7 @@ jobs:
     env:
       vault_token: ${{ secrets.vault_token }}
     steps:
-      - uses: actions/checkout@v5
+      - uses: actions/checkout@v4
       - name: Docker Build
         run: |
           cd runner-docker-image
