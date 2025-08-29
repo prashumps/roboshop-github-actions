@@ -14,3 +14,4 @@ jobs:
           cd runner-docker-image
           docker build -t prasanthreddymps/github-runner .
           docker login -u prasanthreddymps -p ${{ secrets.DOCKER_TOKEN }}
+          docker push prasanthreddymps/github-runner
