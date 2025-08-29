@@ -11,4 +11,5 @@ jobs:
       - uses: actions/checkout@v5
       - name: Docker Build
         run: |
+          cd runner-docker-image
           docker build -t prasanthreddymps/github-runner .
