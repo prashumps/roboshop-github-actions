@@ -17,8 +17,8 @@ jobs:
           echo npm test
         name: Download dependencies
 
-  Maven_Build:
+  Maven_Test:
     if: ${{ inputs.appType == 'maven' }}
     runs-on: self-hosted
     steps:
-      - run: echo OK
+      - run: echo mvn test
