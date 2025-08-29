@@ -8,9 +8,9 @@ jobs:
   Build:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v5
       - name: Docker Build
         run: |
           cd runner-docker-image
-#          docker build -t prasanthreddymps/github-runner .
+          docker build -t prasanthreddymps/github-runner .
           docker login -u prasanthreddymps -p ${{ secrets.DOCKER_TOKEN }}
