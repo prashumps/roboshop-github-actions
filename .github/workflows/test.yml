@@ -5,6 +5,9 @@ on:
       appType:
         required: true
         type: string
+      appName:
+        required: true
+        type: string
 
 jobs:
   NodeJS_Test:

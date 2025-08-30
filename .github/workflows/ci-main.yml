@@ -5,23 +5,29 @@ on:
       appType:
         required: true
         type: string
+      appName:
+        required: true
+        type: string
 
 jobs:
   Build:
     uses: prashumps/roboshop-github-actions/.github/workflows/build.yml@main
     with:
       appType: '${{ inputs.appType }}'
+      appName: '${{ inputs.appName }}'
       docker_build: false
   Test:
     needs: Build
     uses: prashumps/roboshop-github-actions/.github/workflows/test.yml@main
     with:
       appType: '${{ inputs.appType }}'
+      appName: '${{ inputs.appName }}'
   DockerBuild:
     needs: Test
     uses: prashumps/roboshop-github-actions/.github/workflows/build.yml@main
     with:
         appType: '${{ inputs.appType }}'
+        appName: '${{ inputs.appName }}'
         docker_build: 'true'
   Dev_Deploy:
     environment: DEV
