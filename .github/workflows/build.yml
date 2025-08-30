@@ -19,7 +19,7 @@ jobs:
         name: Download dependencies
       - name: Docker Build
         if: ${{ inputs.docker_build == 'true' }}
-        run: docker_build .
+        run: docker build .
   Maven_Build:
     if: ${{ inputs.appType == 'maven' }}
     runs-on: self-hosted
