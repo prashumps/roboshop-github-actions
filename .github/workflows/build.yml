@@ -11,13 +11,14 @@ on:
       docker_build:
         required: true
         type: string
+    secrets:
+      vault_token:
+        required: true
 
 jobs:
   NodeJS_Build:
     if: ${{ inputs.appType == 'nodejs' }}
     runs-on: self-hosted
-    env:
-      vault_token: ${{ secrets.vault_token }}
     steps:
       - uses: actions/checkout@v5
       - run: npm install
@@ -39,6 +40,7 @@ jobs:
           az login --service-principal --username "${ARM_CLIENT_ID}" --password "${ARM_CLIENT_SECRET}" --tenant "${ARM_TENANT_ID}"
           az acr login --name prashumps
           docker build -t prashumps.azurecr.io/prashumps-${{ inputs.appName }}:${{ github.sha }} .
+          docker push prashumps.azurecr.io/prashumps-${{ inputs.appName }}:${{ github.sha }}
   Maven_Build:
     if: ${{ inputs.appType == 'maven' }}
     runs-on: self-hosted

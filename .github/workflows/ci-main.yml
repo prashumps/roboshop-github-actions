@@ -8,6 +8,9 @@ on:
       appName:
         required: true
         type: string
+    secrets:
+      vault_token:
+        required: true
 
 jobs:
   Build:
@@ -16,6 +19,8 @@ jobs:
       appType: '${{ inputs.appType }}'
       appName: '${{ inputs.appName }}'
       docker_build: false
+    secrets:
+      vault_token: '${{ secrets.vault_token }}'
   Test:
     needs: Build
     uses: prashumps/roboshop-github-actions/.github/workflows/test.yml@main
@@ -29,6 +34,8 @@ jobs:
         appType: '${{ inputs.appType }}'
         appName: '${{ inputs.appName }}'
         docker_build: 'true'
+    secrets:
+      vault_token: '${{ secrets.vault_token }}'
   Dev_Deploy:
     environment: DEV
     needs: DockerBuild
