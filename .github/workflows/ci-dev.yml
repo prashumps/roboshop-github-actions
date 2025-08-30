@@ -10,3 +10,4 @@ jobs:
     uses: prashumps/roboshop-github-actions/.github/workflows/build.yml@main
     with:
       appType: '${{ inputs.appType }}'
+      appName: '${{ inputs.appName }}'
