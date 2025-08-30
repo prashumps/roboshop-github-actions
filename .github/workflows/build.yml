@@ -5,6 +5,9 @@ on:
       appType:
         required: true
         type: string
+      docker_build:
+        required: true
+        type: string
 
 jobs:
   NodeJS_Build:
@@ -14,7 +17,9 @@ jobs:
       - uses: actions/checkout@v5
       - run: npm install
         name: Download dependencies
-
+      - name: Docker Build
+        if: ${{ inputs.docker_build == 'true' }}
+        run: docker_build .
   Maven_Build:
     if: ${{ inputs.appType == 'maven' }}
     runs-on: self-hosted
