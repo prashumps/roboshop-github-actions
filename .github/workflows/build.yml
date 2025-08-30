@@ -22,3 +22,9 @@ jobs:
       - uses: actions/checkout@v5
       - run: mvn package
         name: Download dependencies
+
+  Angular_Build:
+    if: ${{ inputs.appType == 'angular' }}
+    runs-on: self-hosted
+    steps:
+      - run: echo ng build
