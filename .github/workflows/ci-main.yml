@@ -25,7 +25,7 @@ jobs:
         docker_build: 'true'
   Dev_Deploy:
     environment: DEV
-    needs: Test
+    needs: DockerBuild
     runs-on: self-hosted
     steps:
       - run: echo OK
