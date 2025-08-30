@@ -17,6 +17,15 @@ jobs:
     uses: prashumps/roboshop-github-actions/.github/workflows/test.yml@main
     with:
       appType: '${{ inputs.appType }}'
+  DockerBuild:
+    runs-on: self-hosted
+    needs: Test
+    steps:
+      - uses: prashumps/roboshop-github-actions/.github/workflows/build.yml@main
+        with:
+          appType: '${{ inputs.appType }}'
+      - run: docker build .
+        name: Docker BUILD
 
   Dev_Deploy:
     environment: DEV
