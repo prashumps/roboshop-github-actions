@@ -18,15 +18,27 @@ jobs:
     with:
       appType: '${{ inputs.appType }}'
       appName: '${{ inputs.appName }}'
-      docker_build: false
+      docker_build: 'false'
     secrets:
       vault_token: '${{ secrets.vault_token }}'
+
   Test:
     needs: Build
-    uses: prashumps/roboshop-github-actions/.github/workflows/test.yml@main
-    with:
-      appType: '${{ inputs.appType }}'
-      appName: '${{ inputs.appName }}'
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v5
+      - run: |
+          echo npm install
+          echo npm test
+        name: Run NodeJs Tests
+        if: ${{ inputs.appType == 'nodejs' }}
+      - run: echo mvn test
+        name: Run Maven Tests
+        if: ${{ inputs.appType == 'maven' }}
+      - run: echo python -m unittest
+        name: Run Python Tests
+        if: ${{ inputs.appType == 'python' }}
+
   DockerBuild:
     needs: Test
     uses: prashumps/roboshop-github-actions/.github/workflows/build.yml@main

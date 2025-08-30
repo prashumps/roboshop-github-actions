@@ -16,39 +16,18 @@ on:
         required: true
 
 jobs:
-  NodeJS_Build:
-    if: ${{ inputs.appType == 'nodejs' }}
+  Build:
     runs-on: self-hosted
     steps:
       - uses: actions/checkout@v5
       - run: npm install
-        name: Download dependencies
-      - name: Import Secrets
-        id: import-secrets
-        uses: hashicorp/vault-action@v2
-        with:
-          url: http://vault-int.prashumps.online:8200
-          token: ${{ secrets.vault_token }}
-          secrets: |
-            roboshop-infra/data/azure-sp ARM_CLIENT_ID | ARM_CLIENT_ID ;
-            roboshop-infra/data/azure-sp ARM_CLIENT_SECRET | ARM_CLIENT_SECRET ;
-            roboshop-infra/data/azure-sp ARM_TENANT_ID | ARM_TENANT_ID ;
-            roboshop-infra/data/azure-sp ARM_SUBSCRIPTION_ID | ARM_SUBSCRIPTION_ID ;
-      - name: Docker Build
-        if: ${{ inputs.docker_build == 'true' }}
-        run: |
-          az login --service-principal --username "${ARM_CLIENT_ID}" --password "${ARM_CLIENT_SECRET}" --tenant "${ARM_TENANT_ID}"
-          az acr login --name prashumps
-          docker build -t prashumps.azurecr.io/prashumps-${{ inputs.appName }}:${{ github.sha }} .
-          docker push prashumps.azurecr.io/prashumps-${{ inputs.appName }}:${{ github.sha }}
-  Maven_Build:
-    if: ${{ inputs.appType == 'maven' }}
-    runs-on: self-hosted
-    steps:
-      - uses: actions/checkout@v5
+        name: Download NodeJsdependencies
+        if: ${{ inputs.appType == 'nodejs' }}
       - run: mvn package
-        name: Download dependencies
+        name: Download NodeJsdependencies
+        if: ${{ inputs.appType == 'maven' }}
       - name: Import Secrets
+        if: ${{ inputs.docker_build == 'true' }}
         id: import-secrets
         uses: hashicorp/vault-action@v2
         with:
@@ -66,9 +45,3 @@ jobs:
           az acr login --name prashumps
           docker build -t prashumps.azurecr.io/prashumps-${{ inputs.appName }}:${{ github.sha }} .
           docker push prashumps.azurecr.io/prashumps-${{ inputs.appName }}:${{ github.sha }}
-
-  Angular_Build:
-    if: ${{ inputs.appType == 'angular' }}
-    runs-on: self-hosted
-    steps:
-      - run: echo ng build
