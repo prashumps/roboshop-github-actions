@@ -48,12 +48,18 @@ jobs:
         docker_build: 'true'
     secrets:
       vault_token: '${{ secrets.vault_token }}'
+
   Dev_Deploy:
-    environment: DEV
     needs: DockerBuild
-    runs-on: self-hosted
-    steps:
-      - run: echo OK
+#    environment: DEV
+    uses: prashumps/roboshop-github-actions/.github/workflows/aks-deploy.yml@main
+    with:
+      appEnv: 'dev'
+      resourceGroup: 'ukwest-dev'
+      appName: '${{ inputs.appName }}'
+    secrets:
+      vault_token: '${{ secrets.vault_token }}'
+
   Qa_Deploy:
     environment: QA
     needs: Dev_Deploy

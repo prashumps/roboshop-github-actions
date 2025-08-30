@@ -1,0 +1,46 @@
+name: AKS Deploy
+on:
+  workflow_call:
+    inputs:
+      appName:
+        required: true
+        type: string
+      appEnv:
+        required: true
+        type: string
+      resourceGroup:
+        required: true
+        type: string
+    secrets:
+      vault_token:
+        required: true
+
+jobs:
+  Deploy:
+    runs-on: self-hosted
+    steps:
+      - uses: actions/checkout@v5
+      - name: Checkout Helm repo
+        uses: actions/checkout@v5
+        with:
+          repository: prashumps/roboshop-helm
+          path: helm
+      - name: Import Secrets
+        if: ${{ inputs.docker_build == 'true' }}
+        id: import-secrets
+        uses: hashicorp/vault-action@v2
+        with:
+          url: http://vault-int.prashumps.online:8200
+          token: ${{ secrets.vault_token }}
+          secrets: |
+            roboshop-infra/data/azure-sp ARM_CLIENT_ID | ARM_CLIENT_ID ;
+            roboshop-infra/data/azure-sp ARM_CLIENT_SECRET | ARM_CLIENT_SECRET ;
+            roboshop-infra/data/azure-sp ARM_TENANT_ID | ARM_TENANT_ID ;
+            roboshop-infra/data/azure-sp ARM_SUBSCRIPTION_ID | ARM_SUBSCRIPTION_ID ;
+      - name: Deploy
+        if: ${{ inputs.docker_build == 'true' }}
+        run: |
+          cd helm
+          az login --service-principal --username "${ARM_CLIENT_ID}" --password "${ARM_CLIENT_SECRET}" --tenant "${ARM_TENANT_ID}"
+          az aks get-credentials --name main-${{ inputs.appEnv }} --resource-group ${{ inputs.resourceGroup }} --overwrite-existing
+          helm upgrade -i ${{ inputs.appName }} . -f env-${{ inputs.appEnv }}/${{ inputs.appName }}.yaml -n app --create-namespace
