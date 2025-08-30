@@ -26,7 +26,6 @@ jobs:
           repository: prashumps/roboshop-helm
           path: helm
       - name: Import Secrets
-        if: ${{ inputs.docker_build == 'true' }}
         id: import-secrets
         uses: hashicorp/vault-action@v2
         with:
